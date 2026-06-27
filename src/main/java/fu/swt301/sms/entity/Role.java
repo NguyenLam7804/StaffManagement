@@ -1,6 +1,7 @@
 package fu.swt301.sms.entity;
 
 public class Role {
+
     private int roleID;
     private String roleName;
 

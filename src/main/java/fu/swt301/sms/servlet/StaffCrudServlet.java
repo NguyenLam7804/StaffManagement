@@ -1,29 +1,32 @@
 package fu.swt301.sms.servlet;
 
+import java.io.IOException;
+import java.sql.SQLException;
+import java.util.List;
+
 import fu.swt301.sms.dao.RoleDAO;
 import fu.swt301.sms.dao.StaffDAO;
 import fu.swt301.sms.entity.Role;
 import fu.swt301.sms.entity.Staff;
-
 import jakarta.servlet.ServletException;
 import jakarta.servlet.annotation.WebServlet;
 import jakarta.servlet.http.HttpServlet;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
-import java.io.IOException;
-import java.sql.SQLException;
-import java.util.List;
 
 /**
- * This servlet acts as a controller for all CRUD (Create, Read, Update, Delete) operations related to Staff.
- * It handles both the display of forms (for creating/editing) and the processing of submitted form data.
+ * This servlet acts as a controller for all CRUD (Create, Read, Update, Delete)
+ * operations related to Staff. It handles both the display of forms (for
+ * creating/editing) and the processing of submitted form data.
  */
 @WebServlet("/staff-crud")
 public class StaffCrudServlet extends HttpServlet {
 
     /**
-     * Handles POST requests, which are used to submit data for creating or updating a staff member.
-     * This method contains the core logic for data validation and persistence.
+     * Handles POST requests, which are used to submit data for creating or
+     * updating a staff member. This method contains the core logic for data
+     * validation and persistence.
+     *
      * @param request The HttpServletRequest object containing the form data.
      * @param response The HttpServletResponse object for sending the response.
      * @throws ServletException If a servlet-specific error occurs.
@@ -101,7 +104,9 @@ public class StaffCrudServlet extends HttpServlet {
     }
 
     /**
-     * Handles GET requests, which are used to display pages or perform simple actions like deletion.
+     * Handles GET requests, which are used to display pages or perform simple
+     * actions like deletion.
+     *
      * @param request The HttpServletRequest object.
      * @param response The HttpServletResponse object.
      * @throws ServletException If a servlet-specific error occurs.

@@ -1,6 +1,7 @@
 package fu.swt301.sms.entity;
 
 public class Staff {
+
     private int staffID;
     private String fullName;
     private boolean gender;

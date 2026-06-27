@@ -1,28 +1,30 @@
 package fu.swt301.sms.config;
 
-import fu.swt301.sms.utils.DBUtils;
-import jakarta.servlet.ServletContextEvent;
-import jakarta.servlet.ServletContextListener;
-import jakarta.servlet.annotation.WebListener;
-
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 
+import fu.swt301.sms.utils.DBUtils;
+import jakarta.servlet.ServletContextEvent;
+import jakarta.servlet.ServletContextListener;
+import jakarta.servlet.annotation.WebListener;
+
 /**
- * This listener class is automatically instantiated and invoked by the web container when the application starts up.
- * Its primary purpose is to initialize the database by:
- * 1. Creating the necessary tables ('Role', 'Staff') if they do not already exist.
- * 2. Seeding the tables with default data (e.g., user roles and a default admin account) if they are empty.
- * This makes the application self-contained and easier to deploy.
+ * This listener class is automatically instantiated and invoked by the web
+ * container when the application starts up. Its primary purpose is to
+ * initialize the database by: 1. Creating the necessary tables ('Role',
+ * 'Staff') if they do not already exist. 2. Seeding the tables with default
+ * data (e.g., user roles and a default admin account) if they are empty. This
+ * makes the application self-contained and easier to deploy.
  */
 @WebListener
 public class DataInitializer implements ServletContextListener {
 
     /**
-     * This method is called by the container when the web application is first started.
-     * It orchestrates the database initialization process.
+     * This method is called by the container when the web application is first
+     * started. It orchestrates the database initialization process.
+     *
      * @param sce The event object containing the ServletContext.
      */
     @Override
@@ -35,8 +37,7 @@ public class DataInitializer implements ServletContextListener {
 
             // Step 2: Check if the 'Role' table is empty. If it is, we assume the database is new and needs seeding.
             boolean dataExists = false;
-            try (PreparedStatement ps = conn.prepareStatement("SELECT COUNT(*) FROM Role");
-                 ResultSet rs = ps.executeQuery()) {
+            try (PreparedStatement ps = conn.prepareStatement("SELECT COUNT(*) FROM Role"); ResultSet rs = ps.executeQuery()) {
                 if (rs.next() && rs.getInt(1) > 0) {
                     dataExists = true;
                 }
@@ -59,7 +60,9 @@ public class DataInitializer implements ServletContextListener {
     }
 
     /**
-     * Checks if the 'Role' table exists in the database. If not, it creates the table.
+     * Checks if the 'Role' table exists in the database. If not, it creates the
+     * table.
+     *
      * @param conn The active database connection.
      * @throws SQLException if a database access error occurs.
      */
@@ -79,10 +82,10 @@ public class DataInitializer implements ServletContextListener {
 
         if (!tableExists) {
             System.out.println("Table 'Role' not found. Creating table...");
-            String createSQL = "CREATE TABLE Role (" +
-                               "Role_ID INT PRIMARY KEY, " +
-                               "Role_Name NVARCHAR(50) NOT NULL UNIQUE" +
-                               ")";
+            String createSQL = "CREATE TABLE Role ("
+                    + "Role_ID INT PRIMARY KEY, "
+                    + "Role_Name NVARCHAR(50) NOT NULL UNIQUE"
+                    + ")";
             try (PreparedStatement ps = conn.prepareStatement(createSQL)) {
                 ps.execute();
                 System.out.println("Table 'Role' created.");
@@ -91,8 +94,9 @@ public class DataInitializer implements ServletContextListener {
     }
 
     /**
-     * Checks if the 'Staff' table exists in the database. If not, it creates the table
-     * with a foreign key constraint pointing to the 'Role' table.
+     * Checks if the 'Staff' table exists in the database. If not, it creates
+     * the table with a foreign key constraint pointing to the 'Role' table.
+     *
      * @param conn The active database connection.
      * @throws SQLException if a database access error occurs.
      */
@@ -112,17 +116,17 @@ public class DataInitializer implements ServletContextListener {
 
         if (!tableExists) {
             System.out.println("Table 'Staff' not found. Creating table...");
-            String createSQL = "CREATE TABLE Staff (" +
-                               "StaffID INT PRIMARY KEY IDENTITY(1,1), " +
-                               "FullName NVARCHAR(100) NOT NULL, " +
-                               "Gender BIT NOT NULL, " +
-                               "PhoneNumber VARCHAR(20), " +
-                               "Email VARCHAR(100) NOT NULL UNIQUE, " +
-                               "Password VARCHAR(255) NOT NULL, " +
-                               "Role_ID INT NOT NULL, " +
-                               "IsActive BIT NOT NULL, " +
-                               "CONSTRAINT FK_Staff_Role FOREIGN KEY (Role_ID) REFERENCES Role(Role_ID)" +
-                               ")";
+            String createSQL = "CREATE TABLE Staff ("
+                    + "StaffID INT PRIMARY KEY IDENTITY(1,1), "
+                    + "FullName NVARCHAR(100) NOT NULL, "
+                    + "Gender BIT NOT NULL, "
+                    + "PhoneNumber VARCHAR(20), "
+                    + "Email VARCHAR(100) NOT NULL UNIQUE, "
+                    + "Password VARCHAR(255) NOT NULL, "
+                    + "Role_ID INT NOT NULL, "
+                    + "IsActive BIT NOT NULL, "
+                    + "CONSTRAINT FK_Staff_Role FOREIGN KEY (Role_ID) REFERENCES Role(Role_ID)"
+                    + ")";
             try (PreparedStatement ps = conn.prepareStatement(createSQL)) {
                 ps.execute();
                 System.out.println("Table 'Staff' created.");
@@ -131,8 +135,9 @@ public class DataInitializer implements ServletContextListener {
     }
 
     /**
-     * Inserts a predefined set of data into the 'Role' and 'Staff' tables.
-     * This includes 'Admin' and 'Staff' roles, and a default administrator account.
+     * Inserts a predefined set of data into the 'Role' and 'Staff' tables. This
+     * includes 'Admin' and 'Staff' roles, and a default administrator account.
+     *
      * @param conn The active database connection.
      * @throws SQLException if a database access error occurs.
      */
@@ -167,8 +172,9 @@ public class DataInitializer implements ServletContextListener {
     }
 
     /**
-     * This method is called by the container when the web application is about to be shut down.
-     * No cleanup action is needed in this case.
+     * This method is called by the container when the web application is about
+     * to be shut down. No cleanup action is needed in this case.
+     *
      * @param sce The event object containing the ServletContext.
      */
     @Override

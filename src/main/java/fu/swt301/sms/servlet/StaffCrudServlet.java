@@ -34,8 +34,6 @@ public class StaffCrudServlet extends HttpServlet {
         this.roleService = roleService;
         this.validationService = validationService;
     }
-    
-    
 
     /**
      * Handles POST requests, which are used to submit data for creating or
@@ -73,17 +71,18 @@ public class StaffCrudServlet extends HttpServlet {
 
         // --- Step 2: Perform server-side validation for uniqueness ---
         String errorMessage = null;
-        try {
-            if (staffDAO.isEmailExists(staff.getEmail(), staff.getStaffID())) {
-                errorMessage = "Email already exists. Please choose another one.";
-            } else if (staffDAO.isFullNameExists(staff.getFullName(), staff.getStaffID())) {
-                errorMessage = "Full name already exists. Please choose another one.";
-            } else if (staffDAO.isPhoneNumberExists(staff.getPhoneNumber(), staff.getStaffID())) {
-                errorMessage = "Phone number already exists. Please choose another one.";
-            }
-        } catch (SQLException | ClassNotFoundException e) {
-            e.printStackTrace();
-            errorMessage = "Database error during validation.";
+        if (staffService.isEmailExists(
+                staff.getEmail(),
+                staff.getStaffID())) {
+            errorMessage = "Email already exists. Please choose another one.";
+        } else if (staffService.isFullNameExists(
+                staff.getFullName(),
+                staff.getStaffID())) {
+            errorMessage = "Full name already exists. Please choose another one.";
+        } else if (staffService.isPhoneExists(
+                staff.getPhoneNumber(),
+                staff.getStaffID())) {
+            errorMessage = "Phone number already exists. Please choose another one.";
         }
 
         // --- Step 3: Handle validation failure ---
@@ -94,7 +93,7 @@ public class StaffCrudServlet extends HttpServlet {
             request.setAttribute("staff", staff); // This preserves the user's input in the form fields.
 
             // Also, reload the list of roles for the dropdown.
-            List<Role> roleList = roleDAO.getAllRoles();
+            List<Role> roleList = roleService.getAllRoles();
             request.setAttribute("roleList", roleList);
 
             // Forward the request back to the form page to display the error and the preserved data.
@@ -106,9 +105,9 @@ public class StaffCrudServlet extends HttpServlet {
         // --- Step 4: Handle validation success ---
         // If there were no errors, proceed with the database operation.
         if ("create".equals(action)) {
-            staffDAO.createStaff(staff);
+            staffService.createStaff(staff);
         } else if ("update".equals(action)) {
-            staffDAO.updateStaff(staff);
+            staffService.updateStaff(staff);
         }
 
         // After a successful operation, redirect the user to the staff list page.
@@ -132,18 +131,18 @@ public class StaffCrudServlet extends HttpServlet {
         if ("delete".equals(action)) {
             // Handle deletion action.
             int staffId = Integer.parseInt(request.getParameter("id"));
-            staffDAO.deleteStaff(staffId);
+            staffService.deleteStaff(staffId);
             response.sendRedirect("staff-list");
         } else {
             // Handles both "create" and "edit" actions, as both need to display the form.
             // First, always fetch the list of roles for the dropdown.
-            List<Role> roleList = roleDAO.getAllRoles();
+            List<Role> roleList = roleService.getAllRoles();
             request.setAttribute("roleList", roleList);
 
             if ("edit".equals(action)) {
                 // If editing, fetch the existing staff member's data to pre-populate the form.
                 int staffId = Integer.parseInt(request.getParameter("id"));
-                Staff staff = staffDAO.getStaffById(staffId);
+                Staff staff = staffService.getStaffById(staffId);
                 request.setAttribute("staff", staff);
             }
             // If creating, we just need the empty form with the role list.

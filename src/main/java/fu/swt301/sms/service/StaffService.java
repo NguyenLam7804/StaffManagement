@@ -18,8 +18,9 @@ import java.util.logging.Logger;
  * @author admin
  */
 public class StaffService {
-    private static final Logger LOGGER =
-            Logger.getLogger(StaffService.class.getName());
+
+    private static final Logger LOGGER
+            = Logger.getLogger(StaffService.class.getName());
 
     private final StaffDAO staffDAO;
 
@@ -32,7 +33,7 @@ public class StaffService {
     }
 
     public List<Staff> getStaffList(String name, String status) {
-        try {   
+        try {
             return staffDAO.getStaffByFilter(name, status);
         } catch (Exception ex) {
             LOGGER.log(Level.SEVERE, "Cannot load staff list.", ex);
@@ -99,5 +100,13 @@ public class StaffService {
             LOGGER.log(Level.SEVERE, "Name validation failed.", ex);
             return true;
         }
+    }
+
+    public List<Staff> getAllStaff() {
+        return getStaffList("", "");
+    }
+
+    public List<Staff> searchStaff(String name, String status) {
+        return getStaffList(name, status);
     }
 }

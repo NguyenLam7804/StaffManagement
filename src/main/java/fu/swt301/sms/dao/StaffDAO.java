@@ -198,32 +198,31 @@ public class StaffDAO {
         }
         return false;
     }
-
     // 9. Kiểm tra trùng lặp Email (Dùng cho cả Add và Update)
-    // - Khi Add: truyền staffId là null hoặc 0
-    // - Khi Update: truyền staffId của nhân viên đang sửa
-    public boolean isEmailExists(String email, Integer staffId) {
-        StringBuilder sql = new StringBuilder("SELECT COUNT(*) FROM Staff WHERE Email = ?");
+// - Khi Add: truyền staffId là null hoặc 0
+// - Khi Update: truyền staffId của nhân viên đang sửa
+public boolean isEmailExists(String email, Integer staffId) {
+    StringBuilder sql = new StringBuilder("SELECT COUNT(*) FROM Staff WHERE Email = ?");
+    if (staffId != null && staffId > 0) {
+        sql.append(" AND Staff_ID != ?");
+    }
+    
+    try (Connection conn = DBUtils.getConnection();
+         PreparedStatement ps = conn.prepareStatement(sql.toString())) {
+        
+        ps.setString(1, email);
         if (staffId != null && staffId > 0) {
-            sql.append(" AND Staff_ID != ?");
+            ps.setInt(2, staffId);
         }
         
-        try (Connection conn = DBUtils.getConnection();
-             PreparedStatement ps = conn.prepareStatement(sql.toString())) {
-            
-            ps.setString(1, email);
-            if (staffId != null && staffId > 0) {
-                ps.setInt(2, staffId);
+        try (ResultSet rs = ps.executeQuery()) {
+            if (rs.next()) {
+                return rs.getInt(1) > 0;
             }
-            
-            try (ResultSet rs = ps.executeQuery()) {
-                if (rs.next()) {
-                    return rs.getInt(1) > 0;
-                }
-            }
-        } catch (Exception e) {
-            e.printStackTrace();
         }
-        return false;
+    } catch (Exception e) {
+        e.printStackTrace();
+    }
+    return false;
     }
 }

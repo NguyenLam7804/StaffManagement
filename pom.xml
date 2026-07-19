@@ -15,7 +15,7 @@
     </properties>
 
     <dependencies>
-        <!-- 1. C? S? D? LI?U: SQL Server Driver -->
+        <!-- 1. CƠ SỞ DỮ LIỆU: SQL Server Driver -->
         <dependency>
             <groupId>com.microsoft.sqlserver</groupId>
             <artifactId>mssql-jdbc</artifactId>
@@ -36,7 +36,7 @@
             <scope>provided</scope>
         </dependency>
 
-        <!-- 3. GIAO DI?N: JSTL -->
+        <!-- 3. GIAO DIỆN: JSTL -->
         <dependency>
             <groupId>org.glassfish.web</groupId>
             <artifactId>jakarta.servlet.jsp.jstl</artifactId>
@@ -48,14 +48,14 @@
             <version>3.0.0</version>
         </dependency>
 
-        <!-- 4. B?O M?T: BCrypt ?? m� h�a m?t kh?u -->
+        <!-- 4. BẢO MẬT: BCrypt để mã hóa mật khẩu -->
         <dependency>
             <groupId>org.mindrot</groupId>
             <artifactId>jbcrypt</artifactId>
             <version>0.4</version>
         </dependency>
 
-        <!-- 5. B�O C�O: Apache POI ?? xu?t file Excel -->
+        <!-- 5. BÁO CÁO: Apache POI để xuất file Excel -->
         <dependency>
             <groupId>org.apache.poi</groupId>
             <artifactId>poi</artifactId>
@@ -68,10 +68,10 @@
         </dependency>
 
         <!-- ======================================================= -->
-        <!-- TH? VI?N PH?C V? KI?M TH? (TEST SCOPE)                  -->
+        <!-- THƯ VIỆN PHỤC VỤ KIỂM THỬ (TEST SCOPE)                  -->
         <!-- ======================================================= -->
         
-        <!-- Database ?o H2 ph?c v? Unit Test -->
+        <!-- Database ảo H2 phục vụ Unit Test -->
         <dependency>
             <groupId>com.h2database</groupId>
             <artifactId>h2</artifactId>
@@ -93,7 +93,7 @@
             <scope>test</scope>
         </dependency>
 
-        <!-- Mockito ?? Mock Servlet API v� DAO -->
+        <!-- Mockito để Mock Servlet API và DAO -->
         <dependency>
             <groupId>org.mockito</groupId>
             <artifactId>mockito-core</artifactId>
@@ -145,7 +145,7 @@
         </pluginManagement>
 
         <plugins>
-            <!-- JaCoCo Plugin ?? qu�t ?? ph? ki?m th? (Y�u c?u h? th?ng >= 70%) -->
+            <!-- JaCoCo Plugin để quét độ phủ kiểm th thử -->
             <plugin>
                 <groupId>org.jacoco</groupId>
                 <artifactId>jacoco-maven-plugin</artifactId>

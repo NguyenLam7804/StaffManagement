@@ -1,7 +1,5 @@
 package fu.swt301.sms.entity;
 
-import java.sql.Timestamp;
-
 public class Staff {
 
     private int staffID;
@@ -12,9 +10,6 @@ public class Staff {
     private String password;
     private Role role; // Changed from String to Role
     private boolean isActive;
-    // --- Thêm cho tính năng khóa tài khoản (FR-03) ---
-    private int loginAttempts;
-    private Timestamp lockedUntil;
 
     public int getStaffID() {
         return staffID;
@@ -78,20 +73,5 @@ public class Staff {
 
     public void setIsActive(boolean isActive) {
         this.isActive = isActive;
-    }
-    public int getLoginAttempts() {
-        return loginAttempts;
-    }
-
-    public void setLoginAttempts(int loginAttempts) {
-        this.loginAttempts = loginAttempts;
-    }
-
-    public Timestamp getLockedUntil() {
-        return lockedUntil;
-    }
-
-    public void setLockedUntil(Timestamp lockedUntil) {
-        this.lockedUntil = lockedUntil;
     }
 }

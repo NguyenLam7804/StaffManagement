@@ -8,6 +8,9 @@ import fu.swt301.sms.dao.RoleDAO;
 import fu.swt301.sms.dao.StaffDAO;
 import fu.swt301.sms.entity.Role;
 import fu.swt301.sms.entity.Staff;
+import fu.swt301.sms.service.RoleService;
+import fu.swt301.sms.service.StaffService;
+import fu.swt301.sms.service.ValidationService;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.annotation.WebServlet;
 import jakarta.servlet.http.HttpServlet;
@@ -22,6 +25,18 @@ import jakarta.servlet.http.HttpServletResponse;
 @WebServlet("/staff-crud")
 public class StaffCrudServlet extends HttpServlet {
 
+    private final StaffService staffService;
+    private final RoleService roleService;
+    private final ValidationService validationService;
+
+    public StaffCrudServlet(StaffService staffService, RoleService roleService, ValidationService validationService) {
+        this.staffService = staffService;
+        this.roleService = roleService;
+        this.validationService = validationService;
+    }
+    
+    
+
     /**
      * Handles POST requests, which are used to submit data for creating or
      * updating a staff member. This method contains the core logic for data
@@ -35,8 +50,6 @@ public class StaffCrudServlet extends HttpServlet {
     @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         String action = request.getParameter("action");
-        StaffDAO staffDAO = new StaffDAO();
-        RoleDAO roleDAO = new RoleDAO();
 
         // --- Step 1: Populate a Staff object from the request parameters ---
         // Input strings are trimmed to remove leading/trailing whitespace for data consistency.
@@ -115,8 +128,6 @@ public class StaffCrudServlet extends HttpServlet {
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         String action = request.getParameter("action");
-        StaffDAO staffDAO = new StaffDAO();
-        RoleDAO roleDAO = new RoleDAO();
 
         if ("delete".equals(action)) {
             // Handle deletion action.

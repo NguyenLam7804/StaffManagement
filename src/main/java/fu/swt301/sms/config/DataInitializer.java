@@ -125,9 +125,7 @@ public class DataInitializer implements ServletContextListener {
                     + "Password VARCHAR(255) NOT NULL, "
                     + "Role_ID INT NOT NULL, "
                     + "IsActive BIT NOT NULL, "
-                    + "LoginAttempts INT NOT NULL DEFAULT 0, "
-                    + "LockedUntil DATETIME NULL, "
-                    + "CONSTRAINT FK_Staff_Role FOREIGN KEY (Role_ID) REFERENCES Role(Role_ID)" 
+                    + "CONSTRAINT FK_Staff_Role FOREIGN KEY (Role_ID) REFERENCES Role(Role_ID)"
                     + ")";
             try (PreparedStatement ps = conn.prepareStatement(createSQL)) {
                 ps.execute();
@@ -161,14 +159,13 @@ public class DataInitializer implements ServletContextListener {
         // Insert a default administrator user for initial login.
         // IMPORTANT: The password here is plain text. In a real-world application, this should be hashed.
         try (PreparedStatement ps = conn.prepareStatement("INSERT INTO Staff (FullName, Gender, PhoneNumber, Email, Password, Role_ID, IsActive) VALUES (?, ?, ?, ?, ?, ?, ?)")) {
-            String hashedPassword = org.mindrot.jbcrypt.BCrypt.hashpw("admin123", org.mindrot.jbcrypt.BCrypt.gensalt());
             ps.setString(1, "Admin User");
-            ps.setBoolean(2, true);
+            ps.setBoolean(2, true); // true for Male
             ps.setString(3, "0123456789");
             ps.setString(4, "admin@example.com");
-            ps.setString(5, hashedPassword);
-            ps.setInt(6, 1);
-            ps.setBoolean(7, true);
+            ps.setString(5, "admin123"); // WARNING: Plain text password
+            ps.setInt(6, 1); // Role_ID for Admin
+            ps.setBoolean(7, true); // IsActive
             ps.executeUpdate();
             System.out.println("Default admin user inserted.");
         }

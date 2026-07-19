@@ -36,7 +36,10 @@ public class StaffDAO {
         staff.setGender(rs.getBoolean("Gender"));
         staff.setPhoneNumber(rs.getString("PhoneNumber"));
         staff.setEmail(rs.getString("Email"));
+        staff.setPassword(rs.getString("Password"));
         staff.setIsActive(rs.getBoolean("IsActive"));
+        staff.setLoginAttempts(rs.getInt("LoginAttempts"));
+        staff.setLockedUntil(rs.getTimestamp("LockedUntil"));
 
         Role role = new Role();
         role.setRoleID(rs.getInt("Role_ID"));
@@ -125,11 +128,12 @@ public class StaffDAO {
      * @return A populated Staff object if authentication is successful, null
      * otherwise.
      */
-    public Staff checkLogin(String email, String password) {
-        String sql = "SELECT s.*, r.Role_Name FROM Staff s JOIN Role r ON s.Role_ID = r.Role_ID WHERE s.Email = ? AND s.Password = ?";
-        try (Connection conn = DBUtils.getConnection(); PreparedStatement ps = conn.prepareStatement(sql)) {
+/** Tìm nhân viên theo email, trả về cả password đã hash + trạng thái khóa, để AuthService tự so sánh bằng BCrypt. */
+    public Staff findByEmail(String email) {
+        String sql = "SELECT s.*, r.Role_Name FROM Staff s JOIN Role r ON s.Role_ID = r.Role_ID WHERE s.Email = ?";
+        try (Connection conn = DBUtils.getConnection();
+             PreparedStatement ps = conn.prepareStatement(sql)) {
             ps.setString(1, email);
-            ps.setString(2, password);
             try (ResultSet rs = ps.executeQuery()) {
                 if (rs.next()) {
                     return extractStaffFromResultSet(rs);
@@ -139,6 +143,64 @@ public class StaffDAO {
             e.printStackTrace();
         }
         return null;
+    }
+
+    /** Tăng số lần đăng nhập sai. */
+    public void updateLoginAttempts(int staffId, int attempts) {
+        String sql = "UPDATE Staff SET LoginAttempts = ? WHERE StaffID = ?";
+        try (Connection conn = DBUtils.getConnection();
+             PreparedStatement ps = conn.prepareStatement(sql)) {
+            ps.setInt(1, attempts);
+            ps.setInt(2, staffId);
+            ps.executeUpdate();
+        } catch (ClassNotFoundException | SQLException e) {
+            e.printStackTrace();
+        }
+    }
+
+    /**
+     * Khóa tài khoản trong X phút (FR-03: khóa sau 5 lần đăng nhập sai liên tiếp).
+     * Thời điểm hết khóa được tính sẵn ở tầng Java (System.currentTimeMillis())
+     * thay vì dùng hàm DATEADD/GETDATE của SQL Server, để câu lệnh chạy đúng
+     * trên cả H2 (test) lẫn SQL Server (production).
+     */
+    public void lockAccount(int staffId, int lockMinutes) {
+        String sql = "UPDATE Staff SET LockedUntil = ? WHERE StaffID = ?";
+        java.sql.Timestamp lockedUntil =
+                new java.sql.Timestamp(System.currentTimeMillis() + lockMinutes * 60_000L);
+        try (Connection conn = DBUtils.getConnection();
+             PreparedStatement ps = conn.prepareStatement(sql)) {
+            ps.setTimestamp(1, lockedUntil);
+            ps.setInt(2, staffId);
+            ps.executeUpdate();
+        } catch (ClassNotFoundException | SQLException e) {
+            throw new RuntimeException("Khong the khoa tai khoan staffId=" + staffId, e);
+        }
+    }
+
+    /** Reset bộ đếm sai + gỡ khóa, gọi khi đăng nhập thành công. */
+    public void resetLoginAttempts(int staffId) {
+        String sql = "UPDATE Staff SET LoginAttempts = 0, LockedUntil = NULL WHERE StaffID = ?";
+        try (Connection conn = DBUtils.getConnection();
+             PreparedStatement ps = conn.prepareStatement(sql)) {
+            ps.setInt(1, staffId);
+            ps.executeUpdate();
+        } catch (ClassNotFoundException | SQLException e) {
+            e.printStackTrace();
+        }
+    }
+
+    /** Cập nhật mật khẩu — giá trị truyền vào PHẢI đã là chuỗi hash BCrypt. */
+    public void updatePassword(int staffId, String hashedPassword) {
+        String sql = "UPDATE Staff SET Password = ? WHERE StaffID = ?";
+        try (Connection conn = DBUtils.getConnection();
+             PreparedStatement ps = conn.prepareStatement(sql)) {
+            ps.setString(1, hashedPassword);
+            ps.setInt(2, staffId);
+            ps.executeUpdate();
+        } catch (ClassNotFoundException | SQLException e) {
+            e.printStackTrace();
+        }
     }
 
     /**

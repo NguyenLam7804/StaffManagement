@@ -21,6 +21,12 @@ public class StaffListServlet extends HttpServlet {
 
     }
 
+    StaffListServlet(StaffService service) {
+
+        this.staffService = service;
+
+    }
+
     protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         String searchName = request.getParameter("searchName");
         if (searchName == null) {

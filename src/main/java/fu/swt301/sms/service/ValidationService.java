@@ -69,13 +69,13 @@ public class ValidationService {
     private String validateDuplicate(Staff staff) {
         int currentId = staff.getStaffID();
         if (staffService.isEmailExists(staff.getEmail(), currentId)) {
-            return "Email already exists.";
+            return "Email already exists. Please choose another one.";
         }
         if (staffService.isPhoneExists(staff.getPhoneNumber(), currentId)) {
-            return "Phone number already exists.";
+            return "Phone number already exists. Please choose another one.";
         }
         if (staffService.isFullNameExists(staff.getFullName(), currentId)) {
-            return "Full name already exists.";
+            return "Full name already exists. Please choose another one.";
         }
         return null;
     }

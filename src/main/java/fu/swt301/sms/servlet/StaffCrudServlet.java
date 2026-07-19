@@ -35,6 +35,15 @@ public class StaffCrudServlet extends HttpServlet {
 
     }
 
+    StaffCrudServlet(StaffService staffService,
+            RoleService roleService,
+            ValidationService validationService) {
+
+        this.staffService = staffService;
+        this.roleService = roleService;
+        this.validationService = validationService;
+    }
+
     /**
      * Handles POST requests, which are used to submit data for creating or
      * updating a staff member. This method contains the core logic for data

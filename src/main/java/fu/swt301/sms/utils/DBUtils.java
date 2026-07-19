@@ -5,11 +5,13 @@ import java.sql.DriverManager;
 import java.sql.SQLException;
 
 public class DBUtils {
+    // Đã thêm mã hóa encrypt=true và trustServerCertificate=true để không bị lỗi bắt tay SSL với SQL Server
+    private static final String URL = "jdbc:sqlserver://localhost:1433;databaseName=TestDB;encrypt=true;trustServerCertificate=true;";
+    private static final String USER = "sang";
+    private static final String PASS = "123"; 
+
     public static Connection getConnection() throws ClassNotFoundException, SQLException {
-        Connection conn = null;
         Class.forName("com.microsoft.sqlserver.jdbc.SQLServerDriver");
-        String url = "jdbc:sqlserver://localhost:1433;databaseName=TestDB";
-        conn = DriverManager.getConnection(url, "sa", "123");
-        return conn;
+        return DriverManager.getConnection(URL, USER, PASS);
     }
 }

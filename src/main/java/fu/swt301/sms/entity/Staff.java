@@ -1,77 +1,45 @@
 package fu.swt301.sms.entity;
 
 public class Staff {
-
-    private int staffID;
-    private String fullName;
-    private boolean gender;
-    private String phoneNumber;
+    private int staffId;
     private String email;
     private String password;
-    private Role role; // Changed from String to Role
-    private boolean isActive;
+    private String fullName;
+    private boolean gender;
+    private String phone;
+    private int roleId;
 
-    public int getStaffID() {
-        return staffID;
-    }
+    public Staff() {}
 
-    public void setStaffID(int staffID) {
-        this.staffID = staffID;
-    }
-
-    public String getFullName() {
-        return fullName;
-    }
-
-    public void setFullName(String fullName) {
-        this.fullName = fullName;
-    }
-
-    public boolean isGender() {
-        return gender;
-    }
-
-    public void setGender(boolean gender) {
-        this.gender = gender;
-    }
-
-    public String getPhoneNumber() {
-        return phoneNumber;
-    }
-
-    public void setPhoneNumber(String phoneNumber) {
-        this.phoneNumber = phoneNumber;
-    }
-
-    public String getEmail() {
-        return email;
-    }
-
-    public void setEmail(String email) {
+    public Staff(int staffId, String email, String password, String fullName, boolean gender, String phone, int roleId) {
+        this.staffId = staffId;
         this.email = email;
-    }
-
-    public String getPassword() {
-        return password;
-    }
-
-    public void setPassword(String password) {
         this.password = password;
+        this.fullName = fullName;
+        this.gender = gender;
+        this.phone = phone;
+        this.roleId = roleId;
     }
 
-    public Role getRole() {
-        return role;
-    }
+    // Getters and Setters
+    public int getStaffId() { return staffId; }
+    public void setStaffId(int staffId) { this.staffId = staffId; }
 
-    public void setRole(Role role) {
-        this.role = role;
-    }
+    public String getEmail() { return email; }
+    public void setEmail(String email) { this.email = email; }
 
-    public boolean isIsActive() {
-        return isActive;
-    }
+    public String getPassword() { return password; }
+    public void setPassword(String password) { this.password = password; }
 
-    public void setIsActive(boolean isActive) {
-        this.isActive = isActive;
-    }
+    public String getFullName() { return fullName; }
+    public void setFullName(String fullName) { this.fullName = fullName; }
+
+    public boolean isGender() { return gender; }
+    public void setGender(boolean gender) { this.gender = gender; }
+
+    public String getPhone() { return phone; }
+    public void setPhone(String phone) { this.phone = phone; }
+
+    public int getRoleId() { return roleId; }
+    public void setRoleId(int roleId) { this.roleId = roleId; }
 }
